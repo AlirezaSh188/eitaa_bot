@@ -54,45 +54,20 @@
             border-radius: 8px;
             display: none;
         }
-        #error {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #ffdddd;
-            border-radius: 8px;
-            color: red;
-            display: none;
-        }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0"></script>
-</head>
-<body>
-    <div class="container">
-        <h2>ارسال پیام به کانال ایتا</h2>
-        <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
-        <br>
-        <label>
-            <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
-            ارسال فوری
-        </label>
-        <label>
-            <input type="radio" name="sendOption" value="future" onclick="toggleOptions()">
-            ارسال در آینده
-        </label>
-        <div id="futureOptions">
-            <input type="number" id="day" placeholder="روز" min="1" max="31">
-            <input type="number" id="month" placeholder="ماه" min="1" max="12">
-            <input type="number" id="year" placeholder="سال" min="1300" max="1500">
-            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
-            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
-            <button onclick="checkDate()">بررسی تاریخ</button>
-            <div id="result"></div>
-            <div id="error"></div>
-        </div>
-        <button onclick="sendMessage()">ارسال پیام</button>
-        <p id="status"></p>
-    </div>
-
     <script>
+        function getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("todayDate").innerText = getTodayDate();
+        });
+
         function toggleOptions() {
             const futureOptions = document.getElementById("futureOptions");
             const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
@@ -100,36 +75,6 @@
                 futureOptions.style.display = "block";
             } else {
                 futureOptions.style.display = "none";
-            }
-        }
-
-        function toGregorian(jy, jm, jd) {
-            const j = jalaali.toGregorian(jy, jm, jd);
-            return `${j.gy}-${('0' + j.gm).slice(-2)}-${('0' + j.gd).slice(-2)}`;
-        }
-
-        function checkDate() {
-            try {
-                const day = document.getElementById("day").value;
-                const month = document.getElementById("month").value;
-                const year = document.getElementById("year").value;
-
-                if (!day || !month || !year) {
-                    alert("لطفاً تمام فیلدهای زمان را پر کنید");
-                    return;
-                }
-
-                const gregorianDate = toGregorian(parseInt(year), parseInt(month), parseInt(day));
-                const resultDiv = document.getElementById("result");
-                resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
-                resultDiv.style.display = "block";
-                document.getElementById("error").style.display = "none";
-            } catch (error) {
-                const errorDiv = document.getElementById("error");
-                errorDiv.innerHTML = `خطا در تبدیل تاریخ: ${error.message}`;
-                errorDiv.style.display = "block";
-                document.getElementById("result").style.display = "none";
-                console.error("خطا:", error);
             }
         }
 
@@ -146,26 +91,45 @@
             let url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
 
             if (sendOption === "future") {
-                const day = document.getElementById("day").value;
-                const month = document.getElementById("month").value;
-                const year = document.getElementById("year").value;
+                const date = document.getElementById("date").value;
                 const hour = document.getElementById("hour").value;
                 const minute = document.getElementById("minute").value;
 
-                if (!day || !month || !year || !hour || !minute) {
+                if (!date || !hour || !minute) {
                     alert("لطفاً تمام فیلدهای زمان را پر کنید");
                     return;
                 }
 
-                const gregorianDate = toGregorian(parseInt(year), parseInt(month), parseInt(day));
-                const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
+                const sendTime = new Date(`${date}T${hour}:${minute}:00`);
                 const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
                 url += `&date=${unixTimestamp}`;
-                window.location.href = url;
-            } else {
-                window.location.href = url;
             }
+
+            window.location.href = url;
         }
     </script>
+</head>
+<body>
+    <div class="container">
+        <h2>ارسال پیام به کانال ایتا</h2>
+        <p>تاریخ امروز: <span id="todayDate"></span></p>
+        <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
+        <br>
+        <label>
+            <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
+            ارسال فوری
+        </label>
+        <label>
+            <input type="radio" name="sendOption" value="future" onclick="toggleOptions()">
+            ارسال در آینده
+        </label>
+        <div id="futureOptions">
+            <input type="date" id="date" placeholder="تاریخ">
+            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
+            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
+        </div>
+        <button onclick="sendMessage()">ارسال پیام</button>
+        <p id="status"></p>
+    </div>
 </body>
 </html>

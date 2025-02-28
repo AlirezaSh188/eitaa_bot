@@ -90,7 +90,7 @@
         }
 
 function sendMessage() {
-    const message = encodeURIComponent(document.getElementById("message").value.trim());
+    const message = document.getElementById("message").value.trim(); // حذف encodeURIComponent برای پیام
     const imageInput = document.getElementById("image");
     const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
     const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
@@ -111,9 +111,9 @@ function sendMessage() {
 
         const sendTime = new Date(year, month - 1, day, hour, minute, 0);
         const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-        url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}&date=${unixTimestamp}`;
+        url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}&date=${unixTimestamp}`;
     } else {
-        url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
+        url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
     }
 
     if (imageInput.files.length > 0) {

@@ -20,7 +20,16 @@
             display: inline-block;
             margin-top: 50px;
         }
-        textarea, input, select, button {
+        textarea {
+            margin: 10px;
+            padding: 12px;
+            font-size: 16px;
+            width: 50%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button {
             margin: 10px;
             padding: 12px;
             font-size: 16px;
@@ -108,7 +117,11 @@ function sendMessage() {
         url += `&date=${unixTimestamp}`;
     }
 
-    window.open(url, "_blank");
+    const newWindow = window.open(url, "_blank");
+
+    setTimeout(() => {
+        newWindow.close();
+    }, 2000); // تنظیم زمان به میل‌ثانیه
 }
 
 
@@ -116,9 +129,8 @@ function sendMessage() {
 </head>
 <body>
     <div class="container">
-        <h2>ارسال پیام به کانال ایتا</h2>
+        <a href="https://alirezash188.github.io/eitaa_bot/"></a><h2>ارسال پیام به کانال نمونه</h2></a>
         <p>تاریخ امروز: <span id="todayDate"></span></p>
-        <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
         <br>
         <label>
             <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
@@ -135,6 +147,9 @@ function sendMessage() {
             <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
             <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
         </div>
+        <br>
+        <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
+        <br>
         <button onclick="sendMessage()">ارسال پیام</button>
         <p id="status"></p>
     </div>

@@ -103,12 +103,13 @@
                     return;
                 }
 
-                const sendTime = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+                const sendTime = new Date(`${year}-${month}-${day}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
                 const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
                 url += `&date=${unixTimestamp}`;
+                window.location.href = url;
+            } else {
+                window.location.href = url;
             }
-
-            window.location.href = url;
         }
     </script>
 </head>

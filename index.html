@@ -19,7 +19,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: inline-block;
         }
-        input, textarea, button {
+        textarea, button {
             margin: 5px;
             padding: 10px;
             font-size: 16px;
@@ -29,41 +29,32 @@
 </head>
 <body>
     <div class="container">
-        <h2>ارسال پیام به کانال ایتا</h2>
+        <h2>ارسال پیام</h2>
         <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
         <br>
         <button onclick="sendMessage()">ارسال پیام</button>
+        <p id="response"></p>
     </div>
 
     <script>
         function sendMessage() {
-            const message = document.getElementById("message").value.trim();
-            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd"; // توکن شما
-            const chatId = "10480082"; // شناسه کانال
-            
-            if (!message) {
+            const message = document.getElementById("message").value;
+            if (!message.trim()) {
                 alert("لطفاً متن پیام را وارد کنید");
                 return;
             }
-            
-            let apiUrl = `https://eitaayar.ir/api/${token}/sendMessage`;
-            let data = { chat_id: chatId, text: message };
-            
-            fetch(apiUrl, {
+
+            fetch("sendMessage.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ text: message })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.ok) {
-                    alert("پیام با موفقیت ارسال شد!");
-                } else {
-                    alert("خطا در ارسال پیام: " + JSON.stringify(data));
-                }
+                document.getElementById("response").innerText = data.message;
             })
             .catch(error => {
-                alert("مشکلی در ارسال پیام پیش آمد: " + error);
+                document.getElementById("response").innerText = "خطایی رخ داد!";
             });
         }
     </script>

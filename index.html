@@ -38,7 +38,7 @@
 
     <script>
         function sendMessage() {
-            const message = document.getElementById("message").value.trim();
+            const message = encodeURIComponent(document.getElementById("message").value.trim());
             if (!message) {
                 alert("لطفاً متن پیام را وارد کنید");
                 return;
@@ -46,31 +46,9 @@
 
             const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
             const chat_id = "10480082";
-            const url = `https://eitaayar.ir/api/${token}/sendMessage`;
+            const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", url, true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (xhr.status === 200 && response.ok) {
-                        document.getElementById("status").innerText = "✅ پیام ارسال شد!";
-                    } else {
-                        document.getElementById("status").innerText = "❌ خطایی رخ داد!";
-                    }
-                }
-            };
-
-            xhr.onerror = function () {
-                document.getElementById("status").innerText = "❌ مشکل در اتصال به API!";
-            };
-
-            xhr.send(JSON.stringify({
-                chat_id: chat_id,
-                text: message
-            }));
+            window.location.href = url;
         }
     </script>
 </body>

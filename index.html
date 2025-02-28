@@ -143,10 +143,11 @@
 })
 .then(response => response.json())
 .then(data => {
-    console.log(data); // اینجا جزئیات پاسخ بازگشتی را ثبت می‌کند
+    console.log(data); // ثبت جزئیات پاسخ
     if (data.ok) {
         alert("پیام و تصویر با موفقیت ارسال شدند");
     } else {
+        console.log(`خطا: ${data.description}`); // ثبت توضیح خطا
         alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
     }
 })
@@ -154,6 +155,7 @@
     console.error(error); // برای دیباگ
     alert("ارسال پیام با خطا مواجه شد");
 });
+
 
     } else {
         fetch(url)

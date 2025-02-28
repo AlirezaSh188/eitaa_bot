@@ -19,12 +19,13 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: inline-block;
         }
-        input, button {
+        input, textarea, button {
             margin: 5px;
             padding: 10px;
             font-size: 16px;
             width: 80%;
         }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -32,29 +33,55 @@
         <h2>ارسال پیام به کانال ایتا</h2>
         <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
         <br>
+        <label>
+            <input type="radio" name="sendType" value="now" checked onclick="toggleSchedule(false)"> ارسال در همین لحظه
+        </label>
+        <label>
+            <input type="radio" name="sendType" value="scheduled" onclick="toggleSchedule(true)"> ارسال در آینده
+        </label>
+        <br>
+        <div id="scheduleFields" class="hidden">
+            <input type="datetime-local" id="scheduleTime">
+        </div>
+        <br>
         <button onclick="sendMessage()">ارسال پیام</button>
     </div>
 
     <script>
+        function toggleSchedule(show) {
+            document.getElementById('scheduleFields').classList.toggle('hidden', !show);
+        }
+
         function sendMessage() {
             const message = document.getElementById("message").value.trim();
-
+            const sendType = document.querySelector('input[name="sendType"]:checked').value;
+            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd"; // توکن شما
+            const chatId = "10480082"; // شناسه کانال
+            
             if (!message) {
                 alert("لطفاً متن پیام را وارد کنید");
                 return;
             }
-
-            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd"; // توکن شما
-            const chatId = "10480082"; // شناسه کانال
-
-            fetch(`https://eitaayar.ir/api/${token}/sendMessage`, {
+            
+            let apiUrl = `https://eitaayar.ir/api/${token}/sendMessage`;
+            let data = { chat_id: chatId, text: message };
+            
+            if (sendType === "scheduled") {
+                let scheduleTime = document.getElementById("scheduleTime").value;
+                if (!scheduleTime) {
+                    alert("لطفاً زمان ارسال را وارد کنید");
+                    return;
+                }
+                data.date = Math.floor(new Date(scheduleTime).getTime() / 1000);
+            }
+            
+            fetch(apiUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: chatId, text: message })
+                body: JSON.stringify(data)
             })
             .then(response => response.json())
             .then(data => {
-                console.log("پاسخ API:", data);
                 if (data.ok) {
                     alert("پیام با موفقیت ارسال شد!");
                 } else {
@@ -62,7 +89,6 @@
                 }
             })
             .catch(error => {
-                console.error("خطا در ارتباط با API:", error);
                 alert("مشکلی در ارسال پیام پیش آمد: " + error);
             });
         }

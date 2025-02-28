@@ -9,21 +9,50 @@
             font-family: Arial, sans-serif;
             direction: rtl;
             text-align: center;
-            background-color: #f4f4f4;
+            background-color: #f0f0f0;
             padding: 20px;
         }
         .container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: inline-block;
+            margin-top: 50px;
         }
-        textarea, button {
+        textarea, input, select, button {
             margin: 10px;
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
-            width: 300px;
+            width: 280px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #futureOptions {
+            display: none;
+        }
+        #result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            display: none;
         }
     </style>
 </head>
@@ -32,11 +61,65 @@
         <h2>ارسال پیام به کانال ایتا</h2>
         <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
         <br>
+        <label>
+            <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
+            ارسال فوری
+        </label>
+        <label>
+            <input type="radio" name="sendOption" value="future" onclick="toggleOptions()">
+            ارسال در آینده
+        </label>
+        <div id="futureOptions">
+            <input type="number" id="day" placeholder="روز" min="1" max="31">
+            <input type="number" id="month" placeholder="ماه" min="1" max="12">
+            <input type="number" id="year" placeholder="سال" min="1300" max="1500">
+            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
+            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
+            <button onclick="checkDate()">بررسی تاریخ</button>
+            <div id="result"></div>
+        </div>
         <button onclick="sendMessage()">ارسال پیام</button>
         <p id="status"></p>
     </div>
 
     <script>
+        function toggleOptions() {
+            const futureOptions = document.getElementById("futureOptions");
+            const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
+            if (sendOption === "future") {
+                futureOptions.style.display = "block";
+            } else {
+                futureOptions.style.display = "none";
+            }
+        }
+
+        function checkDate() {
+            const day = document.getElementById("day").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+
+            if (!day || !month || !year) {
+                alert("لطفاً تمام فیلدهای زمان را پر کنید");
+                return;
+            }
+
+            const dateString = `${year}/${month}/${day}`;
+            fetch(`https://api.keybit.ir/time/?timestamp=${dateString}&type=solarToGregorian`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                const gregorianDate = data.date;
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
+                resultDiv.style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("مشکلی در تبدیل تاریخ به میلادی به وجود آمد.");
+            });
+        }
+
         function sendMessage() {
             const message = encodeURIComponent(document.getElementById("message").value.trim());
             if (!message) {
@@ -46,9 +129,40 @@
 
             const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
             const chat_id = "10480082";
-            const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
+            const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
+            let url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
 
-            window.location.href = url;
+            if (sendOption === "future") {
+                const day = document.getElementById("day").value;
+                const month = document.getElementById("month").value;
+                const year = document.getElementById("year").value;
+                const hour = document.getElementById("hour").value;
+                const minute = document.getElementById("minute").value;
+
+                if (!day || !month || !year || !hour || !minute) {
+                    alert("لطفاً تمام فیلدهای زمان را پر کنید");
+                    return;
+                }
+
+                const dateString = `${year}/${month}/${day}`;
+                fetch(`https://api.keybit.ir/time/?timestamp=${dateString}&type=solarToGregorian`, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const gregorianDate = data.date;
+                    const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
+                    const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
+                    url += `&date=${unixTimestamp}`;
+                    window.location.href = url;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("مشکلی در تبدیل تاریخ به میلادی به وجود آمد.");
+                });
+            } else {
+                window.location.href = url;
+            }
         }
     </script>
 </body>

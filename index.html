@@ -82,92 +82,82 @@
         }
     </style>
     <script>
-        function getTodayDate() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+    function getTodayDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("todayDate").innerText = getTodayDate();
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("todayDate").innerText = getTodayDate();
+    });
 
-        function toggleOptions() {
-            const futureOptions = document.getElementById("futureOptions");
-            const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
-            futureOptions.style.display = (sendOption === "future") ? "block" : "none";
-        }
+    function toggleOptions() {
+        const futureOptions = document.getElementById("futureOptions");
+        const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
+        futureOptions.style.display = (sendOption === "future") ? "block" : "none";
+    }
 
-        function sendMessage() {
-            const message = document.getElementById("message").value.trim();
-            const imageInput = document.getElementById("image");
-            const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
-            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
-            const chat_id = "10480082";
-            let url;
+    function sendMessage() {
+        const message = document.getElementById("message").value.trim();
+        const imageInput = document.getElementById("image");
+        const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
+        const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
+        const chat_id = "10480082";
+        let url;
 
-            if (sendOption === "future") {
-                const day = document.getElementById("day").value;
-                const month = document.getElementById("month").value;
-                const year = document.getElementById("year").value;
-                const hour = document.getElementById("hour").value;
-                const minute = document.getElementById("minute").value;
+        if (sendOption === "future") {
+            const day = document.getElementById("day").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+            const hour = document.getElementById("hour").value;
+            const minute = document.getElementById("minute").value;
 
-                if (!day || !month || !year || !hour || !minute) {
-                    alert("لطفاً تمام فیلدهای زمان را پر کنید");
-                    return;
-                }
-
-                const sendTime = new Date(year, month - 1, day, hour, minute, 0);
-                const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-                url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}&date=${unixTimestamp}`;
-            } else {
-                url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+            if (!day || !month || !year || !hour || !minute) {
+                alert("لطفاً تمام فیلدهای زمان را پر کنید");
+                return;
             }
 
-            if (imageInput.files.length > 0) {
-                const formData = new FormData();
-                formData.append("chat_id", chat_id);
-                formData.append("caption", message);
-                formData.append("file", imageInput.files[0]);
-
-                fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
-                    method: "POST",
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        alert("پیام و تصویر با موفقیت ارسال شدند");
-                    } else {
-                        alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
-                    }
-                })
-                .catch(error => {
-                    alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
-                });
-            } else {
-                fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        alert("پیام با موفقیت ارسال شد"); // پیام موفقیت
-                        const newWindow = window.open(url, "_blank");
-                        setTimeout(() => {
-                            newWindow.close();
-                        }, 50); // تنظیم زمان به میل‌ثانیه
-                    } else {
-                        alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
-                    }
-                })
-                .catch(error => {
-                    alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
-                });
-            }
+            const sendTime = new Date(year, month - 1, day, hour, minute, 0);
+            const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
+            url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}&date=${unixTimestamp}`;
+        } else {
+            url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
         }
-    </script>
+
+        if (imageInput.files.length > 0) {
+            const formData = new FormData();
+            formData.append("chat_id", chat_id);
+            formData.append("caption", message);
+            formData.append("file", imageInput.files[0]);
+
+            fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
+                method: "POST",
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(response => {
+                alert("پیام و تصویر با موفقیت ارسال شدند");
+            })
+            .catch(error => {
+                alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
+            });
+        } else {
+            fetch(url, {
+                mode: 'no-cors'
+            })
+            .then(response => {
+                alert("پیام با موفقیت ارسال شد"); // پیام موفقیت
+            })
+            .catch(error => {
+                alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
+            });
+        }
+    }
+</script>
+
 </head>
 <body>
     <div class="container">

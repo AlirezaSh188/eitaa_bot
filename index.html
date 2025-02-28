@@ -90,7 +90,7 @@
         }
 
 function sendMessage() {
-    const message = document.getElementById("message").value.trim(); // حذف encodeURIComponent برای پیام
+    const message = document.getElementById("message").value.trim();
     const imageInput = document.getElementById("image");
     const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
     const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
@@ -131,19 +131,31 @@ function sendMessage() {
             if (data.ok) {
                 alert("پیام و تصویر با موفقیت ارسال شدند");
             } else {
-                alert("ارسال پیام با خطا مواجه شد");
+                alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
             }
         })
         .catch(error => {
             alert("ارسال پیام با خطا مواجه شد");
         });
     } else {
-        const newWindow = window.open(url, "_blank");
-        setTimeout(() => {
-            newWindow.close();
-        }, 50); // تنظیم زمان به میل‌ثانیه
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                const newWindow = window.open(url, "_blank");
+                setTimeout(() => {
+                    newWindow.close();
+                }, 50); // تنظیم زمان به میل‌ثانیه
+            } else {
+                alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
+            }
+        })
+        .catch(error => {
+            alert("ارسال پیام با خطا مواجه شد");
+        });
     }
 }
+
 
 
 

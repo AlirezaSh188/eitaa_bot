@@ -19,42 +19,54 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: inline-block;
         }
-        textarea, button {
-            margin: 5px;
+        input, button {
+            margin: 10px;
             padding: 10px;
             font-size: 16px;
-            width: 80%;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>ارسال پیام</h2>
+        <h2>ارسال پیام به کانال ایتا</h2>
         <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
         <br>
         <button onclick="sendMessage()">ارسال پیام</button>
-        <p id="response"></p>
+        <p id="status"></p>
     </div>
 
     <script>
         function sendMessage() {
-            const message = document.getElementById("message").value;
-            if (!message.trim()) {
+            const message = document.getElementById("message").value.trim();
+            if (!message) {
                 alert("لطفاً متن پیام را وارد کنید");
                 return;
             }
 
-            fetch("sendMessage.php", {
+            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
+            const chat_id = "10480082";
+            const url = `https://eitaayar.ir/api/${token}/sendMessage`;
+
+            fetch(url, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: message })
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chat_id: chat_id,
+                    text: message
+                })
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("response").innerText = data.message;
+                if (data.ok) {
+                    document.getElementById("status").innerText = "✅ پیام ارسال شد!";
+                } else {
+                    document.getElementById("status").innerText = "❌ خطایی رخ داد!";
+                }
             })
             .catch(error => {
-                document.getElementById("response").innerText = "خطایی رخ داد!";
+                document.getElementById("status").innerText = "❌ مشکل در اتصال به API!";
             });
         }
     </script>

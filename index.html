@@ -109,14 +109,18 @@
             })
             .then(response => response.json())
             .then(data => {
-                const gregorianDate = data.result.date;
-                const resultDiv = document.getElementById("result");
-                resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
-                resultDiv.style.display = "block";
+                if (data.result && data.result.date) {
+                    const gregorianDate = data.result.date;
+                    const resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
+                    resultDiv.style.display = "block";
+                } else {
+                    throw new Error("Invalid response from API");
+                }
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("مشکلی در تبدیل تاریخ به میلادی به وجود آمد.");
+                alert(`مشکلی در تبدیل تاریخ به میلادی به وجود آمد: ${error.message}`);
             });
         }
 
@@ -150,15 +154,19 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    const gregorianDate = data.result.date;
-                    const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
-                    const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-                    url += `&date=${unixTimestamp}`;
-                    window.location.href = url;
+                    if (data.result && data.result.date) {
+                        const gregorianDate = data.result.date;
+                        const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
+                        const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
+                        url += `&date=${unixTimestamp}`;
+                        window.location.href = url;
+                    } else {
+                        throw new Error("Invalid response from API");
+                    }
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    alert("مشکلی در تبدیل تاریخ به میلادی به وجود آمد.");
+                    alert(`مشکلی در تبدیل تاریخ به میلادی به وجود آمد: ${error.message}`);
                 });
             } else {
                 window.location.href = url;

@@ -55,6 +55,7 @@
             display: none;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0"></script>
 </head>
 <body>
     <div class="container">
@@ -93,6 +94,11 @@
             }
         }
 
+        function toGregorian(jy, jm, jd) {
+            const j = jalaali.toGregorian(jy, jm, jd);
+            return `${j.gy}-${('0' + j.gm).slice(-2)}-${('0' + j.gd).slice(-2)}`;
+        }
+
         function checkDate() {
             const day = document.getElementById("day").value;
             const month = document.getElementById("month").value;
@@ -103,25 +109,10 @@
                 return;
             }
 
-            const dateString = `${year}/${month}/${day}`;
-            fetch(`https://api.keybit.ir/time/?timestamp=${dateString}&type=solarToGregorian`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result && data.result.date) {
-                    const gregorianDate = data.result.date;
-                    const resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
-                    resultDiv.style.display = "block";
-                } else {
-                    throw new Error("Invalid response from API");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert(`مشکلی در تبدیل تاریخ به میلادی به وجود آمد: ${error.message}`);
-            });
+            const gregorianDate = toGregorian(parseInt(year), parseInt(month), parseInt(day));
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
+            resultDiv.style.display = "block";
         }
 
         function sendMessage() {
@@ -148,26 +139,11 @@
                     return;
                 }
 
-                const dateString = `${year}/${month}/${day}`;
-                fetch(`https://api.keybit.ir/time/?timestamp=${dateString}&type=solarToGregorian`, {
-                    method: 'GET'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.result && data.result.date) {
-                        const gregorianDate = data.result.date;
-                        const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
-                        const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-                        url += `&date=${unixTimestamp}`;
-                        window.location.href = url;
-                    } else {
-                        throw new Error("Invalid response from API");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert(`مشکلی در تبدیل تاریخ به میلادی به وجود آمد: ${error.message}`);
-                });
+                const gregorianDate = toGregorian(parseInt(year), parseInt(month), parseInt(day));
+                const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
+                const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
+                url += `&date=${unixTimestamp}`;
+                window.location.href = url;
             } else {
                 window.location.href = url;
             }

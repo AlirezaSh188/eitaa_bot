@@ -79,37 +79,39 @@
             }
         }
 
-        function sendMessage() {
-            const message = encodeURIComponent(document.getElementById("message").value.trim());
-            if (!message) {
-                alert("لطفاً متن پیام را وارد کنید");
-                return;
-            }
+function sendMessage() {
+    const message = encodeURIComponent(document.getElementById("message").value.trim());
+    if (!message) {
+        alert("لطفاً متن پیام را وارد کنید");
+        return;
+    }
 
-            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
-            const chat_id = "10480082";
-            const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
-            let url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
+    const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
+    const chat_id = "10480082";
+    const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
+    let url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
 
-            if (sendOption === "future") {
-                const day = document.getElementById("day").value;
-                const month = document.getElementById("month").value;
-                const year = document.getElementById("year").value;
-                const hour = document.getElementById("hour").value;
-                const minute = document.getElementById("minute").value;
+    if (sendOption === "future") {
+        const day = document.getElementById("day").value;
+        const month = document.getElementById("month").value;
+        const year = document.getElementById("year").value;
+        const hour = document.getElementById("hour").value;
+        const minute = document.getElementById("minute").value;
 
-                if (!day || !month || !year || !hour || !minute) {
-                    alert("لطفاً تمام فیلدهای زمان را پر کنید");
-                    return;
-                }
-
-                const sendTime = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-                const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-                url += `&date=${unixTimestamp}`;
-            }
-            
-            window.location.href = url;
+        if (!day || !month || !year || !hour || !minute) {
+            alert("لطفاً تمام فیلدهای زمان را پر کنید");
+            return;
         }
+
+        // تنظیم دقیق ساعت و دقیقه
+        const sendTime = new Date(year, month - 1, day, hour, minute, 0);
+        const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
+        url += `&date=${unixTimestamp}`;
+    }
+    
+    window.location.href = url;
+}
+
     </script>
 </head>
 <body>

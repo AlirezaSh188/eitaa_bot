@@ -121,7 +121,7 @@ function sendMessage() {
 
     setTimeout(() => {
         newWindow.close();
-    }, 2000); // تنظیم زمان به میل‌ثانیه
+    }, 200); // تنظیم زمان به میل‌ثانیه
 }
 
 
@@ -144,6 +144,7 @@ function sendMessage() {
             <input type="number" id="day" placeholder="روز" min="1" max="31">
             <input type="number" id="month" placeholder="ماه" min="1" max="12">
             <input type="number" id="year" placeholder="سال" min="2023" max="2100">
+            <br>
             <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
             <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
         </div>

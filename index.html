@@ -72,6 +72,18 @@
             width: 24px;
             height: 24px;
         }
+        .send-options {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .send-options input[type="radio"] {
+            margin: 0 5px;
+        }
+        #futureOptions {
+            display: none;
+            margin-top: 10px;
+        }
     </style>
     <script>
         function getTodayDate() {
@@ -170,6 +182,23 @@
         <p>تاریخ امروز: <span id="todayDate"></span></p>
         <br>
         <div class="chat-box"></div>
+        <div class="send-options">
+            <label>
+                <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
+                ارسال فوری
+            </label>
+            <label>
+                <input type="radio" name="sendOption" value="future" onclick="toggleOptions()">
+                ارسال در آینده
+            </label>
+        </div>
+        <div id="futureOptions">
+            <input type="number" id="day" placeholder="روز" min="1" max="31">
+            <input type="number" id="month" placeholder="ماه" min="1" max="12">
+            <input type="number" id="year" placeholder="سال" min="2023" max="2100">
+            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
+            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
+        </div>
         <div class="input-area">
             <label for="image">
                 <img src="https://raw.githubusercontent.com/AlirezaSh188/eitaa_bot/refs/heads/main/icons8-paper-clip-64.png" alt="سنچاق">

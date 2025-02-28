@@ -24,7 +24,7 @@
             margin: 10px;
             padding: 12px;
             font-size: 16px;
-            width: 280px;
+            width: 90px;
             border-radius: 8px;
             border: 1px solid #ccc;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -35,6 +35,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
+            width: 280px;
         }
         button:hover {
             background-color: #45a049;
@@ -91,16 +92,18 @@
             let url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
 
             if (sendOption === "future") {
-                const date = document.getElementById("date").value;
+                const day = document.getElementById("day").value;
+                const month = document.getElementById("month").value;
+                const year = document.getElementById("year").value;
                 const hour = document.getElementById("hour").value;
                 const minute = document.getElementById("minute").value;
 
-                if (!date || !hour || !minute) {
+                if (!day || !month || !year || !hour || !minute) {
                     alert("لطفاً تمام فیلدهای زمان را پر کنید");
                     return;
                 }
 
-                const sendTime = new Date(`${date}T${hour}:${minute}:00`);
+                const sendTime = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
                 const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
                 url += `&date=${unixTimestamp}`;
             }
@@ -124,7 +127,9 @@
             ارسال در آینده
         </label>
         <div id="futureOptions">
-            <input type="date" id="date" placeholder="تاریخ">
+            <input type="number" id="day" placeholder="روز" min="1" max="31">
+            <input type="number" id="month" placeholder="ماه" min="1" max="12">
+            <input type="number" id="year" placeholder="سال" min="2023" max="2100">
             <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
             <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
         </div>

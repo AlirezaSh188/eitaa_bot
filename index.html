@@ -54,6 +54,14 @@
             border-radius: 8px;
             display: none;
         }
+        #error {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffdddd;
+            border-radius: 8px;
+            color: red;
+            display: none;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0"></script>
 </head>
@@ -78,6 +86,7 @@
             <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
             <button onclick="checkDate()">بررسی تاریخ</button>
             <div id="result"></div>
+            <div id="error"></div>
         </div>
         <button onclick="sendMessage()">ارسال پیام</button>
         <p id="status"></p>
@@ -100,19 +109,28 @@
         }
 
         function checkDate() {
-            const day = document.getElementById("day").value;
-            const month = document.getElementById("month").value;
-            const year = document.getElementById("year").value;
+            try {
+                const day = document.getElementById("day").value;
+                const month = document.getElementById("month").value;
+                const year = document.getElementById("year").value;
 
-            if (!day || !month || !year) {
-                alert("لطفاً تمام فیلدهای زمان را پر کنید");
-                return;
+                if (!day || !month || !year) {
+                    alert("لطفاً تمام فیلدهای زمان را پر کنید");
+                    return;
+                }
+
+                const gregorianDate = toGregorian(parseInt(year), parseInt(month), parseInt(day));
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
+                resultDiv.style.display = "block";
+                document.getElementById("error").style.display = "none";
+            } catch (error) {
+                const errorDiv = document.getElementById("error");
+                errorDiv.innerHTML = `خطا در تبدیل تاریخ: ${error.message}`;
+                errorDiv.style.display = "block";
+                document.getElementById("result").style.display = "none";
+                console.error("خطا:", error);
             }
-
-            const gregorianDate = toGregorian(parseInt(year), parseInt(month), parseInt(day));
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
-            resultDiv.style.display = "block";
         }
 
         function sendMessage() {

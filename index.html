@@ -61,10 +61,12 @@
         function sendMessage() {
             const message = document.getElementById("message").value;
             const sendType = document.querySelector('input[name="sendType"]:checked').value;
+
             if (!message.trim()) {
                 alert("لطفاً متن پیام را وارد کنید");
                 return;
             }
+
             if (sendType === "scheduled") {
                 const day = document.getElementById("day").value;
                 const month = document.getElementById("month").value;
@@ -76,7 +78,37 @@
                     return;
                 }
             }
-            alert("پیام ارسال شد!");
+
+            const token = 'bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd'; // توکن بات شما
+            const chatId = '10480082'; // شناسه کانال شما
+
+            // فرمت درخواست به API ایتا
+            const url = `https://api.eitaa.com/bot${token}/sendMessage`;
+            const data = {
+                chat_id: chatId,
+                text: message
+            };
+
+            // ارسال پیام به کانال
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert("پیام با موفقیت ارسال شد!");
+                } else {
+                    alert("خطا در ارسال پیام: " + data.description);
+                }
+            })
+            .catch(error => {
+                console.error("خطا در ارتباط با API:", error);
+                alert("مشکلی در ارسال پیام پیش آمد");
+            });
         }
     </script>
 </body>

@@ -103,6 +103,7 @@
     function sendMessage() {
         const message = document.getElementById("message").value.trim();
         const fileInput = document.getElementById("file");
+        const progressBar = document.getElementById("progressBar");
         const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
         const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
         const chat_id = "10480082";
@@ -133,18 +134,26 @@
             formData.append("caption", message);
             formData.append("file", fileInput.files[0]);
 
-            fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
-                method: "POST",
-                body: formData,
-                mode: 'no-cors'
-            })
-            .then(response => {
-                alert("پیام و فایل با موفقیت ارسال شدند");
-                location.reload(); // صفحه رفرش می‌شود
-            })
-            .catch(error => {
-                alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
-            });
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", `https://eitaayar.ir/api/${token}/sendFile`, true);
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    progressBar.value = percentComplete;
+                }
+            };
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    alert("پیام و فایل با موفقیت ارسال شدند");
+                    location.reload(); // صفحه رفرش می‌شود
+                } else {
+                    alert(`ارسال پیام با خطا مواجه شد: ${xhr.statusText}`);
+                }
+            };
+            xhr.onerror = function() {
+                alert(`ارسال پیام با خطا مواجه شد: ${xhr.statusText}`);
+            };
+            xhr.send(formData);
         } else {
             fetch(url, {
                 mode: 'no-cors'
@@ -159,6 +168,7 @@
         }
     }
 </script>
+
 
 
 
@@ -191,7 +201,8 @@
             <label for="image">
                 <img src="https://raw.githubusercontent.com/AlirezaSh188/eitaa_bot/refs/heads/main/icons8-paper-clip-64.png" alt="سنچاق">
             </label>
-            <input type="file" id="image" accept="image/*,audio/*,video/*">
+            <input type="file" id="file" accept="image/*,audio/*,video/*">
+            <progress id="progressBar" value="0" max="100" style="width: 100%;"></progress>
             <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
             <button onclick="sendMessage()">
                 <img src="https://raw.githubusercontent.com/AlirezaSh188/eitaa_bot/refs/heads/main/icons8-send-96.png" alt="ارسال">

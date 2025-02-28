@@ -139,17 +139,14 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data); // اینجا جزئیات پاسخ بازگشتی را ثبت می‌کند
                     if (data.ok) {
                         alert("پیام و تصویر با موفقیت ارسال شدند");
                     } else {
-                        console.log(`خطا: ${data.description}`); // ثبت توضیح خطا
                         alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
                     }
                 })
                 .catch(error => {
-                    console.error(error); // برای دیباگ
-                    alert("ارسال پیام با خطا مواجه شد");
+                    alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
                 });
             } else {
                 fetch(url)
@@ -166,8 +163,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error(error); // برای دیباگ
-                    alert("ارسال پیام با خطا مواجه شد");
+                    alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
                 });
             }
         }

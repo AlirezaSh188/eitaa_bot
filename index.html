@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ارسال پیام زمان‌بندی شده</title>
+    <title>ارسال پیام به ایتا</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,95 +19,51 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: inline-block;
         }
-        .hidden {
-            display: none;
-        }
-        input, select, button {
+        input, button {
             margin: 5px;
             padding: 10px;
             font-size: 16px;
+            width: 80%;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>ارسال پیام</h2>
+        <h2>ارسال پیام به کانال ایتا</h2>
         <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
-        <br>
-        <label>
-            <input type="radio" name="sendType" value="now" checked onclick="toggleSchedule(false)"> ارسال در همین لحظه
-        </label>
-        <label>
-            <input type="radio" name="sendType" value="scheduled" onclick="toggleSchedule(true)"> ارسال در آینده
-        </label>
-        <br>
-        <div id="scheduleFields" class="hidden">
-            <input type="number" id="day" placeholder="روز" min="1" max="31">
-            <input type="number" id="month" placeholder="ماه" min="1" max="12">
-            <input type="number" id="year" placeholder="سال" min="1403" max="1410">
-            <br>
-            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
-            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
-        </div>
         <br>
         <button onclick="sendMessage()">ارسال پیام</button>
     </div>
 
     <script>
-        function toggleSchedule(show) {
-            document.getElementById('scheduleFields').classList.toggle('hidden', !show);
-        }
-
         function sendMessage() {
-            const message = document.getElementById("message").value;
-            const sendType = document.querySelector('input[name="sendType"]:checked').value;
+            const message = document.getElementById("message").value.trim();
 
-            if (!message.trim()) {
+            if (!message) {
                 alert("لطفاً متن پیام را وارد کنید");
                 return;
             }
 
-            if (sendType === "scheduled") {
-                const day = document.getElementById("day").value;
-                const month = document.getElementById("month").value;
-                const year = document.getElementById("year").value;
-                const hour = document.getElementById("hour").value;
-                const minute = document.getElementById("minute").value;
-                if (!day || !month || !year || !hour || !minute) {
-                    alert("لطفاً تاریخ و زمان معتبر وارد کنید");
-                    return;
-                }
-            }
+            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd"; // توکن شما
+            const chatId = "10480082"; // شناسه کانال
 
-            const token = 'bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd'; // توکن بات شما
-            const chatId = '10480082'; // شناسه کانال شما
-
-            // فرمت درخواست به API ایتا
-            const url = `https://api.eitaa.com/bot${token}/sendMessage`;
-            const data = {
-                chat_id: chatId,
-                text: message
-            };
-
-            // ارسال پیام به کانال
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
+            fetch(`https://eitaayar.ir/api/${token}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: message })
             })
             .then(response => response.json())
             .then(data => {
+                console.log("پاسخ API:", data);
                 if (data.ok) {
                     alert("پیام با موفقیت ارسال شد!");
                 } else {
-                    alert("خطا در ارسال پیام: " + data.description);
+                    alert("خطا در ارسال پیام: " + JSON.stringify(data));
                 }
             })
             .catch(error => {
                 console.error("خطا در ارتباط با API:", error);
-                alert("مشکلی در ارسال پیام پیش آمد");
+                alert("مشکلی در ارسال پیام پیش آمد: " + error);
             });
         }
     </script>

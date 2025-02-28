@@ -14,56 +14,63 @@
         }
         .container {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
         }
-        textarea {
+        .chat-box {
+            width: 100%;
+            max-width: 600px;
+            height: 500px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .input-area {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        .input-area textarea {
+            flex: 1;
             margin: 10px;
             padding: 12px;
             font-size: 16px;
-            width: 80%;
-            height: 90px
+            height: 60px;
             border-radius: 15px;
             border: 1px solid #ccc;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
-        input, select, button {
-            margin: 10px;
-            padding: 12px;
-            font-size: 16px;
-            width: 90px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        .input-area input[type="file"] {
+            display: none;
         }
-        button {
+        .input-area label {
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .input-area button {
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: 280px;
+            padding: 12px;
+            border-radius: 50%;
         }
-        button:hover {
+        .input-area button:hover {
             background-color: #45a049;
         }
-        label {
-            display: block;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        #futureOptions {
-            display: none;
-        }
-        #result {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            display: none;
+        .input-area img {
+            width: 24px;
+            height: 24px;
         }
     </style>
     <script>
@@ -89,76 +96,72 @@
             }
         }
 
-function sendMessage() {
-    const message = document.getElementById("message").value.trim();
-    const imageInput = document.getElementById("image");
-    const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
-    const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
-    const chat_id = "10480082";
-    let url;
+        function sendMessage() {
+            const message = document.getElementById("message").value.trim();
+            const imageInput = document.getElementById("image");
+            const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
+            const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
+            const chat_id = "10480082";
+            let url;
 
-    if (sendOption === "future") {
-        const day = document.getElementById("day").value;
-        const month = document.getElementById("month").value;
-        const year = document.getElementById("year").value;
-        const hour = document.getElementById("hour").value;
-        const minute = document.getElementById("minute").value;
+            if (sendOption === "future") {
+                const day = document.getElementById("day").value;
+                const month = document.getElementById("month").value;
+                const year = document.getElementById("year").value;
+                const hour = document.getElementById("hour").value;
+                const minute = document.getElementById("minute").value;
 
-        if (!day || !month || !year || !hour || !minute) {
-            alert("لطفاً تمام فیلدهای زمان را پر کنید");
-            return;
+                if (!day || !month || !year || !hour || !minute) {
+                    alert("لطفاً تمام فیلدهای زمان را پر کنید");
+                    return;
+                }
+
+                const sendTime = new Date(year, month - 1, day, hour, minute, 0);
+                const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
+                url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}&date=${unixTimestamp}`;
+            } else {
+                url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+            }
+
+            if (imageInput.files.length > 0) {
+                const formData = new FormData();
+                formData.append("chat_id", chat_id);
+                formData.append("caption", message);
+                formData.append("file", imageInput.files[0]);
+
+                fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("پیام و تصویر با موفقیت ارسال شدند");
+                    } else {
+                        alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
+                    }
+                })
+                .catch(error => {
+                    alert("ارسال پیام با خطا مواجه شد");
+                });
+            } else {
+                fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        const newWindow = window.open(url, "_blank");
+                        setTimeout(() => {
+                            newWindow.close();
+                        }, 50); // تنظیم زمان به میل‌ثانیه
+                    } else {
+                        alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
+                    }
+                })
+                .catch(error => {
+                    alert("ارسال پیام با خطا مواجه شد");
+                });
+            }
         }
-
-        const sendTime = new Date(year, month - 1, day, hour, minute, 0);
-        const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-        url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}&date=${unixTimestamp}`;
-    } else {
-        url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
-    }
-
-    if (imageInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append("chat_id", chat_id);
-        formData.append("caption", message);
-        formData.append("file", imageInput.files[0]);
-
-        fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
-            method: "POST",
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.ok) {
-                alert("پیام و تصویر با موفقیت ارسال شدند");
-            } else {
-                alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
-            }
-        })
-        .catch(error => {
-            alert("ارسال پیام با خطا مواجه شد");
-        });
-    } else {
-        fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.ok) {
-                const newWindow = window.open(url, "_blank");
-                setTimeout(() => {
-                    newWindow.close();
-                }, 50); // تنظیم زمان به میل‌ثانیه
-            } else {
-                alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
-            }
-        })
-        .catch(error => {
-            alert("ارسال پیام با خطا مواجه شد");
-        });
-    }
-}
-
-
-
-
     </script>
 </head>
 <body>
@@ -166,29 +169,17 @@ function sendMessage() {
         <a href="https://alirezash188.github.io/eitaa_bot/"><h2>ارسال پیام به کانال نمونه</h2></a>
         <p>تاریخ امروز: <span id="todayDate"></span></p>
         <br>
-        <label>
-            <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
-            ارسال فوری
-        </label>
-        <label>
-            <input type="radio" name="sendOption" value="future" onclick="toggleOptions()">
-            ارسال در آینده
-        </label>
-        <div id="futureOptions">
-            <input type="number" id="day" placeholder="روز" min="1" max="31">
-            <input type="number" id="month" placeholder="ماه" min="1" max="12">
-            <input type="number" id="year" placeholder="سال" min="2023" max="2100">
-            <br>
-            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
-            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
+        <div class="chat-box"></div>
+        <div class="input-area">
+            <label for="image">
+                <img src="https://image.flaticon.com/icons/png/512/33/33123.png" alt="سنچاق">
+            </label>
+            <input type="file" id="image" accept="image/*">
+            <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
+            <button onclick="sendMessage()">
+                <img src="https://image.flaticon.com/icons/png/512/60/60525.png" alt="ارسال">
+            </button>
         </div>
-        <br>
-        <input type="file" id="image" accept="image/*">
-        <br>
-        <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
-        <br>
-        <button onclick="sendMessage()">ارسال پیام</button>
-        <p id="status"></p>
     </div>
 </body>
 </html>

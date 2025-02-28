@@ -132,29 +132,31 @@
     }
 
     if (imageInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append("chat_id", chat_id);
-        formData.append("caption", message);
-        formData.append("file", imageInput.files[0]);
+    const formData = new FormData();
+    formData.append("chat_id", chat_id);
+    formData.append("caption", message);
+    formData.append("file", imageInput.files[0]);
 
-        fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
-    method: "POST",
-    body: formData,
-})
-.then(response => response.json())
-.then(data => {
-    console.log(data); // ثبت جزئیات پاسخ
-    if (data.ok) {
-        alert("پیام و تصویر با موفقیت ارسال شدند");
-    } else {
-        console.log(`خطا: ${data.description}`); // ثبت توضیح خطا
-        alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
-    }
-})
-.catch(error => {
-    console.error(error); // برای دیباگ
-    alert("ارسال پیام با خطا مواجه شد");
-});
+    fetch(`https://eitaayar.ir/api/${token}/sendFile`, {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // اینجا جزئیات پاسخ بازگشتی را ثبت می‌کند
+        if (data.ok) {
+            alert("پیام و تصویر با موفقیت ارسال شدند");
+        } else {
+            console.log(`خطا: ${data.description}`); // ثبت توضیح خطا
+            alert(`ارسال پیام با خطا مواجه شد: ${data.description}`);
+        }
+    })
+    .catch(error => {
+        console.error(error); // برای دیباگ
+        alert("ارسال پیام با خطا مواجه شد");
+    });
+}
+
 
 
     } else {

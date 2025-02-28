@@ -140,6 +140,7 @@
             })
             .then(response => {
                 alert("پیام و تصویر با موفقیت ارسال شدند");
+                location.reload(); // صفحه رفرش می‌شود
             })
             .catch(error => {
                 alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
@@ -150,6 +151,7 @@
             })
             .then(response => {
                 alert("پیام با موفقیت ارسال شد"); // پیام موفقیت
+                location.reload(); // صفحه رفرش می‌شود
             })
             .catch(error => {
                 alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
@@ -157,6 +159,7 @@
         }
     }
 </script>
+
 
 </head>
 <body>

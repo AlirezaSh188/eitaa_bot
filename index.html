@@ -109,7 +109,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                const gregorianDate = data.date;
+                const gregorianDate = data.result.date;
                 const resultDiv = document.getElementById("result");
                 resultDiv.innerHTML = `تاریخ میلادی: ${gregorianDate}`;
                 resultDiv.style.display = "block";
@@ -150,7 +150,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    const gregorianDate = data.date;
+                    const gregorianDate = data.result.date;
                     const sendTime = new Date(`${gregorianDate}T${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:00`);
                     const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
                     url += `&date=${unixTimestamp}`;

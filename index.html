@@ -103,14 +103,14 @@ function sendMessage() {
             return;
         }
 
-        // تنظیم دقیق ساعت و دقیقه
         const sendTime = new Date(year, month - 1, day, hour, minute, 0);
         const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
         url += `&date=${unixTimestamp}`;
     }
-    
-    window.location.href = url;
+
+    window.open(url, "_blank");
 }
+
 
     </script>
 </head>

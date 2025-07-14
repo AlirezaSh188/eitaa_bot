@@ -1,214 +1,162 @@
 <!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ارسال پست به کانال</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            text-align: center;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .input-area {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            max-width: 600px;
-        }
-        .input-area textarea {
-            flex: 1;
-            margin: 10px;
-            padding: 12px;
-            font-size: 16px;
-            height: 60px;
-            border-radius: 15px;
-            border: 1px solid #ccc;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .input-area input[type="file"] {
-            display: none;
-        }
-        .input-area label {
-            margin: 0 10px;
-            cursor: pointer;
-        }
-        .input-area button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            padding: 12px;
-            border-radius: 50%;
-        }
-        .input-area button:hover {
-            background-color: #45a049;
-        }
-        .input-area img {
-            width: 24px;
-            height: 24px;
-        }
-        .send-options {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .send-options input[type="radio"] {
-            margin: 0 5px;
-        }
-        #futureOptions {
-            display: none;
-            flex: 1;
-            margin: 10px;
-            padding: 12px;
-            font-size: 16px;
-            height: 40px;
-            border-radius: 9px;
-            border: 1px solid #ccc;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-<script>
-    function getTodayDate() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("todayDate").innerText = getTodayDate();
-    });
-
-    function toggleOptions() {
-        const futureOptions = document.getElementById("futureOptions");
-        const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
-        futureOptions.style.display = (sendOption === "future") ? "block" : "none";
-    }
-
-    function sendMessage() {
-        const message = document.getElementById("message").value.trim();
-        const fileInput = document.getElementById("file");
-        const progressBar = document.getElementById("progressBar");
-        const sendOption = document.querySelector('input[name="sendOption"]:checked').value;
-        const token = "bot364686:8b37c954-d6bf-43e9-96bb-a7e94e8f2fbd";
-        const chat_id = "10480082";
-        let url;
-
-        if (sendOption === "future") {
-            const day = document.getElementById("day").value;
-            const month = document.getElementById("month").value;
-            const year = document.getElementById("year").value;
-            const hour = document.getElementById("hour").value;
-            const minute = document.getElementById("minute").value;
-
-            if (!day || !month || !year || !hour || !minute) {
-                alert("لطفاً تمام فیلدهای زمان را پر کنید");
-                return;
+<html dir="rtl">
+    <head>
+        <style>
+            html{
+                padding: 0%;
+            }
+            body{
+                background-color: white;
+                color: black;
+                padding: 0%;
             }
 
-            const sendTime = new Date(year, month - 1, day, hour, minute, 0);
-            const unixTimestamp = Math.floor(sendTime.getTime() / 1000);
-            url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}&date=${unixTimestamp}`;
-        } else {
-            url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
-        }
+            h1{
+                text-align: center;
+            }
 
-        if (fileInput.files.length > 0) {
-            const formData = new FormData();
-            formData.append("chat_id", chat_id);
-            formData.append("caption", message);
-            formData.append("file", fileInput.files[0]);
+            nav{
+                position: sticky;
+                top: 6%;
+                width:100%;
+                text-align: center;
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", `https://eitaayar.ir/api/${token}/sendFile`, true);
-            xhr.upload.onprogress = function(event) {
-                if (event.lengthComputable) {
-                    const percentComplete = (event.loaded / event.total) * 100;
-                    progressBar.value = percentComplete;
-                }
-            };
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    alert("پیام و فایل با موفقیت ارسال شدند");
-                    location.reload(); // صفحه رفرش می‌شود
-                } else {
-                    alert(`ارسال پیام با خطا مواجه شد: ${xhr.statusText}`);
-                }
-            };
-            xhr.onerror = function() {
-                alert(`ارسال پیام با خطا مواجه شد: ${xhr.statusText}`);
-            };
-            xhr.send(formData);
-        } else {
-            fetch(url, {
-                mode: 'no-cors'
-            })
-            .then(response => {
-                alert("پیام با موفقیت ارسال شد"); // پیام موفقیت
-                location.reload(); // صفحه رفرش می‌شود
-            })
-            .catch(error => {
-                alert(`ارسال پیام با خطا مواجه شد: ${error.message}`);
-            });
-        }
-    }
-</script>
+            }
 
+            nav a{
+                text-decoration: none;
+                background-color: #c1121f;
+                padding: 20px;
+                color: white;
+                border-radius: 20px;
+            }
 
+            nav a:hover{
+                color: white;
+            }
 
-
-</head>
-<body>
-    <div class="container">
-        <h2>ارسال پست</h2>
-        <P>شما در حال ارسال پیام به کانال مسجد امیرالمؤمنین (ع) شهرستان قائم شهر هستید</P>
-        <p>تاریخ امروز: <span id="todayDate"></span></p>
-        <P><a href="https://alirezash188.github.io/eitaa_bot/">بروزرسانی صفحه</a></P>
-        <br>
-        <div class="send-options">
-            <label>
-                <input type="radio" name="sendOption" value="immediate" onclick="toggleOptions()" checked>
-                ارسال فوری
-            </label>
-            <label>
-                <input type="radio" name="sendOption" value="future" onclick="toggleOptions()">
-                ارسال در آینده
-            </label>
-        </div>
-        <div id="futureOptions">
-            <input type="number" id="day" placeholder="روز" min="1" max="31">
-            <input type="number" id="month" placeholder="ماه" min="1" max="12">
-            <input type="number" id="year" placeholder="سال" min="2023" max="2100">
-            <input type="number" id="hour" placeholder="ساعت" min="0" max="23">
-            <input type="number" id="minute" placeholder="دقیقه" min="0" max="59">
-        </div>
-        <div class="input-area">
-            <label for="image">
-                <img src="https://raw.githubusercontent.com/AlirezaSh188/eitaa_bot/refs/heads/main/icons8-paper-clip-64.png" alt="سنچاق">
-            </label>
-            <input type="file" id="file" accept="image/*,audio/*,video/*">
+            #about{
+                padding-top: 20px;
+            }
             
-            <textarea id="message" placeholder="متن پیام را وارد کنید"></textarea>
-            <button onclick="sendMessage()">
-                <img src="https://raw.githubusercontent.com/AlirezaSh188/eitaa_bot/refs/heads/main/icons8-send-96.png" alt="ارسال">
-            </button>
+            .about-box{
+                padding-top: 20px;
+                background-color: #FDF0D5;
+                margin-left: 10%;
+                margin-right: 10%;
+                margin-top: 70px;
+                padding-left: 10%;
+                padding-right: 10%;
+                padding-bottom: 20px;
+                border-radius: 20px;
+                text-align: justify;
+                text-justify: inter-word;
+            }
+
+            #price{
+                padding-top: 40px;
+            }
+
+            .price-box{
+                background-color: #FDF0D5;
+                margin-left: 10%;
+                margin-right: 10%;
+                margin-top: 50px;
+                padding-left: 10%;
+                padding-right: 10%;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                border-radius: 20px;
+                text-align: justify;
+                text-justify: inter-word;
+            }
+
+            .order-box{
+                background-color: #FDF0D5;
+                margin-left: 10%;
+                margin-right: 10%;
+                margin-top: 50px;
+                padding-left: 10%;
+                padding-right: 10%;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                border-radius: 20px; 
+                text-align: justify;
+                text-justify: inter-word;
+            }
+
+            #order{
+                padding-top: 40px;
+            }
+
+            .footer{
+                text-align: center;
+                background-color: #c1121f;
+                color: white;
+                padding-bottom: 60px;
+                padding-top: 40px;
+                max-width: 1500px;
+                margin-top: 40px;
+            }
+
+        </style>
+    </head>
+
+    <body>
+
+        <nav>
+            <a href="#about">درباره ی ما</a>
+            <a href="#price">لیست قیمت</a>
+            <a href="#order">ثبت سفارش</a>
+        </nav>
+
+        
+
+        <div>
+            
+            <div id="about">
+                <div class="about-box">
+                    <h1>
+                        چاپ توت فرنگی
+                    </h1>
+                    <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
+                    </p>
+                </div>
+            </div>
+
+            <div id="price">
+                <div class="price-box">
+                    <h1>
+                        قیمت
+                    </h1>
+                    <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
+                    </p>
+                    <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
+                    </p>
+                </div>
+            </div>
+
+            <div id="order">
+                <div class="order-box">
+                    <h1>
+                        ثبت سفارش
+                    </h1>
+                    <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
+                    </p>
+                    <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
+                    </p>
+                </div>
+            </div>
         </div>
-        <progress id="progressBar" value="0" max="100" style="width: 100%;"></progress>
-    </div>
-</body>
+        
+        <div class="footer">
+            تابستان 1404
+        </div>
+    </body>
 </html>

@@ -3,13 +3,16 @@
 <html dir="rtl">
     <head>
         <style>
+            * {
+                padding: 0px;
+                margin: 0px;
+            }
             html {
             scroll-behavior: smooth;
             }
             body{
                 background-color: white;
                 color: black;
-                padding: 0%;
             }
 
             h1{
@@ -32,11 +35,22 @@
                 margin-left: 5%;
                 margin-right: 5%;
                 font-size: 10pt;
-                transition: 0.5s;
+                transition: 0.2s;
             }
 
             nav a:hover{
+                background-color: #e0626a;
                 color: white;
+                text-decoration: none;
+            }
+
+            .boxh{
+                margin-bottom: 50px;
+                margin-top: 30px;
+            }
+
+            .inboxh{
+                text-align: center;
             }
 
             #about{
@@ -48,22 +62,22 @@
                 background-color: #FDF0D5;
                 margin-left: 10%;
                 margin-right: 10%;
-                margin-top: 30px;
+                margin-top: 10px;
                 padding-left: 10%;
                 padding-right: 10%;
                 padding-bottom: 20px;
                 border-radius: 20px;
                 text-align: justify;
                 text-justify: inter-word;
-                transition: box-shadow 0.1s;
+                transition: box-shadow 0.7s;
             }
 
             .about-box:hover{
-                box-shadow: 0.5px 0px 12px -2px #ff9ba2;
+                box-shadow: 0px -5px #c1121f;
             }
 
             #price{
-                padding-top: 40px;
+                padding-top: 20px;
             }
 
             .price-box{
@@ -78,13 +92,42 @@
                 border-radius: 20px;
                 text-align: justify;
                 text-justify: inter-word;
-                transition: box-shadow 0.1s;
+                transition: box-shadow 0.7s;
             }
 
             .price-box:hover{
-                box-shadow: 0.5px 0px 12px -2px #ff9ba2;
+                box-shadow: 0px -5px #c1121f;
             }
-            
+
+            table{
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                background-color: #FDF0D5;
+
+            }
+
+            td, th{
+                border-bottom: 1px solid #C1121F;
+                padding: 15px;
+                text-align: right;   
+            }
+
+            th{
+                background-color: #fffaf1;
+                color: rgb(0, 0, 0);
+                transition: 0.9s;
+            }
+
+            tr:hover{
+                background-color: #fdf6e7;
+            }
+
+            #lastRow{
+                border-bottom: 3px solid #C1121F;
+            }
+
             .order-box{
                 background-color: #FDF0D5;
                 margin-left: 10%;
@@ -97,25 +140,56 @@
                 border-radius: 20px; 
                 text-align: justify;
                 text-justify: inter-word;
-                transition: box-shadow 0.1s;
+                transition: box-shadow 0.7s;
             }
 
             .order-box:hover{
-                box-shadow: 0.5px 0px 12px -2px #ff9ba2;
+                box-shadow: 0px -5px #c1121f;
             }
 
             #order{
-                padding-top: 40px;
+                padding-top: 20px;
             }
 
             .footer{
                 text-align: center;
                 background-color: #c1121f;
                 color: white;
+                width: 100%;
                 padding-bottom: 120px;
                 padding-top: 40px;
-                width: 100%;
                 margin-top: 40px;
+            }
+
+
+            .footertext{
+                width: 200px;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                border-radius: 20px;
+                transition: 0.3s;
+            }
+
+            .footertext:hover{
+                background-color: #e0626a;
+                text-align: center;
+                width: 200px;
+                margin-left: auto;
+                margin-right: auto;
+
+            }
+
+            .footertext a{
+                text-decoration: none;
+                color: white;
+                padding-left: 15px;
+                padding-right: 15px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                border-radius: 20px;
             }
 
         </style>
@@ -135,7 +209,7 @@
             
             <div id="about">
                 <div class="about-box">
-                    <h1>
+                    <h1 class="boxh">
                         چاپ توت فرنگی
                     </h1>
                     <p>
@@ -146,21 +220,183 @@
 
             <div id="price">
                 <div class="price-box">
-                    <h1>
-                        قیمت
+                    <h1 class="boxh">
+                        لیست خدمات و قیمت ها    
                     </h1>
-                    <p>
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
-                    </p>
-                    <p>
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.    
-                    </p>
+                    <div class="price-inbox">
+                        <table>
+                            <tr>
+                                <th style="text-align: center;">عنوان</th>
+                                <th colspan="2">شرح</th>
+                                <th>قیمت (تومان)</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="text-align: center;">چاپ A4</th>
+                                <td>سیاه / سفید</td>
+                                <td>تک رو</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr id="lastRow">
+                                <td>سیاه / سفید</td>
+                                <td>دو رو</td>
+                                <td>2000</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="text-align: center;">چاپ A5</th>
+                                <td>سیاه / سفید</td>
+                                <td>تک رو</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr id="lastRow">
+                                <td>سیاه / سفید</td>
+                                <td>دو رو</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="5" style="text-align: center;">خدمات پس از چاپ</th>
+                                <td>منگنه</td>
+                                <td>هر 3 سوزن</td>
+                                <td>5000</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">صحافی سیمی</td>
+                                <td>تا 50 برگ</td>
+                                <td>45000</td>
+                            </tr>
+                            <tr>
+                                <td>تا 200 برگ</td>
+                                <td>60000</td>
+                            </tr>
+                            <tr>
+                                <td>تا 500 برگ</td>
+                                <td>75000</td>
+                            </tr>
+                            <tr id="lastRow">
+                                <td>جلد صحافی</td>
+                                <td>پاپکو ضخیم درجه 1</td>
+                                <td>15000</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="text-align: center;">سایر خدمات</th>
+                                <td>طراحی / تنظیم صفحه</td>
+                                <td>هر ساعت کار</td>
+                                <td>150000</td>
+                            </tr>
+                            <tr id="lastRow">
+                                <td>تایپ</td>
+                                <td>هر صفحه</td>
+                                <td>70000</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="6" style="text-align: center;">فروش</th>
+                                <td rowspan="5">کاغذ</td>
+                                <td>A4</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr>
+                                <td>A5</td>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>میلی متری</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td>لگاریتمی</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td>نیم لگاریتمی</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr id="lastRow">
+                                <td>کاور</td>
+                                <td>A4</td>
+                                <td>2000</td>
+                            </tr>
+                        </table>
+                        <!--<h2 class="inboxh">
+                            پرینت A4
+                        </h2>
+                        <table>
+                            <tr>
+                                <th id="rightColumn">عنوان خدمت</th>
+                                <th id="leftColumn">قیمت</th>
+                            </tr>
+                            <tr>
+                                <td>تک رو</td>
+                                <td>1500 تومان</td>
+                            </tr>
+                            <tr>
+                                <td>دو رو</td>
+                                <td>2000 تومان</td>
+                            </tr>
+                        </table>
+                        <h2 class="inboxh">
+                            پرینت A5
+                        </h2>
+                        <table>
+                            <tr>
+                                <th id="rightColumn">عنوان خدمت</th>
+                                <th id="leftColumn">قیمت</th>
+                            </tr>
+                            <tr>
+                                <td>تک رو</td>
+                                <td>1000 تومان</td>
+                            </tr>
+                            <tr>
+                                <td>دو رو</td>
+                                <td>1500 تومان</td>
+                            </tr>
+                        </table>
+                        <h2 class="inboxh">
+                            خدمات چاپ
+                        </h2>
+                        <table>
+                            <tr>
+                                <th id="rightColumn">عنوان خدمت</th>
+                                <th id="leftColumn">قیمت</th>
+                            </tr>
+                            <tr>
+                                <td>منگنه</td>
+                                <td>هر 3 سوزن 5000 تومان</td>
+                            </tr>
+                        </table>
+                        <h2 class="inboxh">
+                            سایر خدمات
+                        </h2>
+                        <table>
+                            <tr>
+                                <th id="rightColumn">عنوان خدمت</th>
+                                <th id="leftColumn">قیمت</th>
+                            </tr>
+                            <tr>
+                                <td>تک رو</td>
+                                <td>1500 تومان</td>
+                            </tr>
+                        </table>
+                        <h2 class="inboxh">
+                            فروش
+                        </h2>
+                        <table>
+                            <tr>
+                                <th id="rightColumn">عنوان خدمت</th>
+                                <th id="leftColumn">قیمت</th>
+                            </tr>
+                            <tr>
+                                <td>تک رو</td>
+                                <td>1500 تومان</td>
+                            </tr>
+                        </table>-->
+
+                    </div>
+
                 </div>
             </div>
 
             <div id="order">
                 <div class="order-box">
-                    <h1>
+                    <h1 class="boxh">
                         ثبت سفارش
                     </h1>
                     <p>
@@ -173,8 +409,12 @@
             </div>
         </div>
         
-        <div class="footer">
-            چاپ توت فرنگی - تابستان 1404
+        <div class="footer">    
+            <div class="footertext">
+                <a href="index.html">
+                    چاپ توت فرنگی - تابستان1404
+                </a>
+            </div>  
         </div>
     </body>
 </html>

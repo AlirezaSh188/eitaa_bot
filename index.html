@@ -99,13 +99,23 @@
                 box-shadow: 0px -5px #c1121f;
             }
 
+            .tableRound{
+                border-radius: 20px;
+                border: 0px solid #C1121F;
+                overflow: hidden;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                transition: 0.7s;
+            }
+
+            .tableRound:hover{
+                box-shadow: 0px -3px #C1121F;
+            }
+
             table{
                 border-collapse: collapse;
                 width: 100%;
-                margin-top: 20px;
-                margin-bottom: 20px;
                 background-color: #FDF0D5;
-
             }
 
             td, th{
@@ -115,17 +125,20 @@
             }
 
             th{
-                background-color: #fffaf1;
+                background-color: #fef6e6;
                 color: rgb(0, 0, 0);
-                transition: 0.9s;
             }
 
             tr:hover{
-                background-color: #fdf6e7;
+                background-color: #fef6e5;
             }
 
             #lastRow{
                 border-bottom: 3px solid #C1121F;
+            }
+
+            #endRow{
+                border: none;
             }
 
             .order-box{
@@ -224,171 +237,99 @@
                         لیست خدمات و قیمت ها    
                     </h1>
                     <div class="price-inbox">
-                        <table>
-                            <tr>
-                                <th style="text-align: center;">عنوان</th>
-                                <th colspan="2">شرح</th>
-                                <th>قیمت (تومان)</th>
-                            </tr>
-                            <tr>
-                                <th rowspan="2" style="text-align: center;">چاپ A4</th>
-                                <td>سیاه / سفید</td>
-                                <td>تک رو</td>
-                                <td>1500</td>
-                            </tr>
-                            <tr id="lastRow">
-                                <td>سیاه / سفید</td>
-                                <td>دو رو</td>
-                                <td>2000</td>
-                            </tr>
-                            <tr>
-                                <th rowspan="2" style="text-align: center;">چاپ A5</th>
-                                <td>سیاه / سفید</td>
-                                <td>تک رو</td>
-                                <td>1000</td>
-                            </tr>
-                            <tr id="lastRow">
-                                <td>سیاه / سفید</td>
-                                <td>دو رو</td>
-                                <td>1500</td>
-                            </tr>
-                            <tr>
-                                <th rowspan="5" style="text-align: center;">خدمات پس از چاپ</th>
-                                <td>منگنه</td>
-                                <td>هر 3 سوزن</td>
-                                <td>5000</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="3">صحافی سیمی</td>
-                                <td>تا 50 برگ</td>
-                                <td>45000</td>
-                            </tr>
-                            <tr>
-                                <td>تا 200 برگ</td>
-                                <td>60000</td>
-                            </tr>
-                            <tr>
-                                <td>تا 500 برگ</td>
-                                <td>75000</td>
-                            </tr>
-                            <tr id="lastRow">
-                                <td>جلد صحافی</td>
-                                <td>پاپکو ضخیم درجه 1</td>
-                                <td>15000</td>
-                            </tr>
-                            <tr>
-                                <th rowspan="2" style="text-align: center;">سایر خدمات</th>
-                                <td>طراحی / تنظیم صفحه</td>
-                                <td>هر ساعت کار</td>
-                                <td>150000</td>
-                            </tr>
-                            <tr id="lastRow">
-                                <td>تایپ</td>
-                                <td>هر صفحه</td>
-                                <td>70000</td>
-                            </tr>
-                            <tr>
-                                <th rowspan="6" style="text-align: center;">فروش</th>
-                                <td rowspan="5">کاغذ</td>
-                                <td>A4</td>
-                                <td>1000</td>
-                            </tr>
-                            <tr>
-                                <td>A5</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>میلی متری</td>
-                                <td>1500</td>
-                            </tr>
-                            <tr>
-                                <td>لگاریتمی</td>
-                                <td>1500</td>
-                            </tr>
-                            <tr>
-                                <td>نیم لگاریتمی</td>
-                                <td>1500</td>
-                            </tr>
-                            <tr id="lastRow">
-                                <td>کاور</td>
-                                <td>A4</td>
-                                <td>2000</td>
-                            </tr>
-                        </table>
-                        <!--<h2 class="inboxh">
-                            پرینت A4
-                        </h2>
-                        <table>
-                            <tr>
-                                <th id="rightColumn">عنوان خدمت</th>
-                                <th id="leftColumn">قیمت</th>
-                            </tr>
-                            <tr>
-                                <td>تک رو</td>
-                                <td>1500 تومان</td>
-                            </tr>
-                            <tr>
-                                <td>دو رو</td>
-                                <td>2000 تومان</td>
-                            </tr>
-                        </table>
-                        <h2 class="inboxh">
-                            پرینت A5
-                        </h2>
-                        <table>
-                            <tr>
-                                <th id="rightColumn">عنوان خدمت</th>
-                                <th id="leftColumn">قیمت</th>
-                            </tr>
-                            <tr>
-                                <td>تک رو</td>
-                                <td>1000 تومان</td>
-                            </tr>
-                            <tr>
-                                <td>دو رو</td>
-                                <td>1500 تومان</td>
-                            </tr>
-                        </table>
-                        <h2 class="inboxh">
-                            خدمات چاپ
-                        </h2>
-                        <table>
-                            <tr>
-                                <th id="rightColumn">عنوان خدمت</th>
-                                <th id="leftColumn">قیمت</th>
-                            </tr>
-                            <tr>
-                                <td>منگنه</td>
-                                <td>هر 3 سوزن 5000 تومان</td>
-                            </tr>
-                        </table>
-                        <h2 class="inboxh">
-                            سایر خدمات
-                        </h2>
-                        <table>
-                            <tr>
-                                <th id="rightColumn">عنوان خدمت</th>
-                                <th id="leftColumn">قیمت</th>
-                            </tr>
-                            <tr>
-                                <td>تک رو</td>
-                                <td>1500 تومان</td>
-                            </tr>
-                        </table>
-                        <h2 class="inboxh">
-                            فروش
-                        </h2>
-                        <table>
-                            <tr>
-                                <th id="rightColumn">عنوان خدمت</th>
-                                <th id="leftColumn">قیمت</th>
-                            </tr>
-                            <tr>
-                                <td>تک رو</td>
-                                <td>1500 تومان</td>
-                            </tr>
-                        </table>-->
-
+                        <div class="tableRound">
+                            <table>
+                                <tr>
+                                    <th style="text-align: center;">عنوان</th>
+                                    <th colspan="2">شرح</th>
+                                    <th>قیمت (تومان)</th>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2" style="text-align: center;">چاپ A4</th>
+                                    <td>سیاه / سفید</td>
+                                    <td>تک رو</td>
+                                    <td>1500</td>
+                                </tr>
+                                <tr id="lastRow">
+                                    <td>سیاه / سفید</td>
+                                    <td>دو رو</td>
+                                    <td>2000</td>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2" style="text-align: center;">چاپ A5</th>
+                                    <td>سیاه / سفید</td>
+                                    <td>تک رو</td>
+                                    <td>1000</td>
+                                </tr>
+                                <tr id="lastRow">
+                                    <td>سیاه / سفید</td>
+                                    <td>دو رو</td>
+                                    <td>1500</td>
+                                </tr>
+                                <tr>
+                                    <th rowspan="5" style="text-align: center;">خدمات پس از چاپ</th>
+                                    <td>منگنه</td>
+                                    <td>هر 3 سوزن</td>
+                                    <td>5000</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">صحافی سیمی</td>
+                                    <td>تا 50 برگ</td>
+                                    <td>45000</td>
+                                </tr>
+                                <tr>
+                                    <td>تا 200 برگ</td>
+                                    <td>60000</td>
+                                </tr>
+                                <tr>
+                                    <td>تا 500 برگ</td>
+                                    <td>75000</td>
+                                </tr>
+                                <tr id="lastRow">
+                                    <td>جلد صحافی</td>
+                                    <td>پاپکو ضخیم درجه 1</td>
+                                    <td>15000</td>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2" style="text-align: center;">سایر خدمات</th>
+                                    <td>طراحی / تنظیم صفحه</td>
+                                    <td>هر ساعت کار</td>
+                                    <td>150000</td>
+                                </tr>
+                                <tr id="lastRow">
+                                    <td>تایپ</td>
+                                    <td>هر صفحه</td>
+                                    <td>70000</td>
+                                </tr>
+                                <tr>
+                                    <th id="endRow" rowspan="6" style="text-align: center;">فروش</th>
+                                    <td rowspan="5">کاغذ</td>
+                                    <td>A4</td>
+                                    <td>1000</td>
+                                </tr>
+                                <tr>
+                                    <td>A5</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td>میلی متری</td>
+                                    <td>1500</td>
+                                </tr>
+                                <tr>
+                                    <td>لگاریتمی</td>
+                                    <td>1500</td>
+                                </tr>
+                                <tr>
+                                    <td>نیم لگاریتمی</td>
+                                    <td>1500</td>
+                                </tr>
+                                <tr id="endRow">
+                                    <td id="endRow">کاور</td>
+                                    <td id="endRow">A4</td>
+                                    <td id="endRow">2000</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
